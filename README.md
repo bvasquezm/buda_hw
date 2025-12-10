@@ -1,78 +1,70 @@
-# Buda API Project
+# API Buda - Cálculo de Valor de Portafolio
 
-A TypeScript-based API service for interacting with the Buda.com cryptocurrency exchange API.
+**API para Buda**
 
-## Project Structure
+Servicio API en TypeScript que calcula el valor total de un portafolio de criptomonedas consultando la API de Buda.com en tiempo real.
+
+## Estructura del Proyecto
 
 ```
 src/
-├── clients/           # External API clients
-│   └── buda/
-│       ├── buda.client.ts       # HTTP client for Buda API
-│       └── buda.types.ts        # Type definitions
-├── services/          # Business logic layer
-│   ├── market.service.ts        # Market operations with caching
-│   ├── portfolio.service.ts     # Portfolio calculations
-│   └── ticker.service.ts        # Price fetching
-├── utils/             # Utility functions
-│   ├── calculations.ts          # Calculation helpers
-│   └── validators.ts            # Validation functions
-├── models/            # Domain models
-│   └── portfolio.model.ts
-├── controllers/       # HTTP controllers
-│   └── portfolio.controller.ts
-├── routes/            # Route definitions
-│   └── portfolio.routes.ts
-└── index.ts           # Application entry point
+├── clients/buda/           # Cliente externo de Buda API
+├── services/               # Lógica de negocio
+│   ├── market.service.ts       # Operaciones con mercados (con caché)
+│   ├── portfolio.service.ts    # Cálculos de portafolio
+│   └── ticker.service.ts       # Obtención de precios
+├── controllers/            # Controladores HTTP
+├── routes/                 # Rutas de la API
+└── utils/                  # Funciones de validación y cálculo
 ```
 
-## Installation
+## Instalación
 
 ```bash
 npm install
 ```
 
-## Usage
+## Uso
 
-### Start the server
+### Iniciar servidor
 
 ```bash
 npm start
 ```
 
-Server will run on `http://localhost:3000`
+Servidor disponible en `http://localhost:3000`
 
-### Run tests
+### Ejecutar tests
 
 ```bash
 npm test
 ```
 
-## API Endpoints
+## Endpoints
 
 ### Health Check
 ```
 GET /health
 ```
 
-### Calculate Portfolio Value
+### Calcular Valor de Portafolio
 ```
 POST /api/portfolio/value
 ```
 
-**Request Body:**
+**Body:**
 ```json
 {
-  "portfolio": {
+  "holdings": {
     "BTC": 1.5,
     "ETH": 10,
     "CLP": 50000
   },
-  "fiat_currency": "CLP"
+  "currency": "CLP"
 }
 ```
 
-**Response:**
+**Respuesta:**
 ```json
 {
   "totalValue": 125000000,
@@ -80,33 +72,28 @@ POST /api/portfolio/value
   "breakdown": [
     {
       "coin": "BTC",
-      "value": 75000000
-    },
-    {
-      "coin": "ETH",
-      "value": 50000000
-    },
-    {
-      "coin": "CLP",
-      "value": 50000
+      "amount": 1.5,
+      "value": 75000000,
+      "price": 50000000
     }
   ]
 }
 ```
 
-## Features
+## Características Clave
 
-- **Layered Architecture**: Clear separation of concerns with clients, services, controllers
-- **Caching**: Market data cached for 1 minute to reduce API calls
-- **Parallel Processing**: Fetches multiple ticker prices in parallel for performance
-- **Validation**: Input validation and minimum order amount checks
-- **Type Safety**: Full TypeScript support with strict typing
-- **Error Handling**: Graceful error handling with proper HTTP status codes
+### 🚀 Paralelismo
+- **Fetch paralelo de precios**: Las cotizaciones de todos los activos se obtienen simultáneamente con `Promise.all()`, reduciendo drasticamente el tiempo de respuesta.
+- Sin paralelismo: 5 activos × 500ms = 2.5 segundos
+- Con paralelismo: ~500ms para todos los activos
 
-## Architecture Benefits
+### 🔌 Desacoplamiento
+- **Arquitectura en capas**: Cliente → Servicios → Controladores
+- **Inyección de dependencias**: Los servicios no crean instancias, las reciben como parámetros
+- **Interfaces**: Las implementaciones dependen de abstracciones, no de clases concretas
+- **Reutilizable**: Los servicios pueden usarse en diferentes endpoints sin cambios
 
-1. **Testability**: Each layer can be tested independently
-2. **Maintainability**: Clear structure makes code easy to understand and modify
-3. **Scalability**: Easy to add new services or endpoints
-4. **Loose Coupling**: Services depend on abstractions, not implementations
-5. **Single Responsibility**: Each class has one well-defined purpose
+### 💾 Optimizaciones
+- **Caché de mercados**: Almacena datos de mercados por 1 minuto para evitar llamadas repetidas
+- **Validación temprana**: Rechaza inputs inválidos antes de consultar APIs externas
+- **Manejo de errores**: Si una cotización falla, continúa con las demás
