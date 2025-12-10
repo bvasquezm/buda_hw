@@ -24,11 +24,11 @@ describe('Buda API Integration', () => {
             expect(result.markets.length).toBeGreaterThan(0);
         });
 
-        it('should fetch ticker for BTC-CLP', async () => {
-            const result = await budaClient.getTicker('BTC-CLP');
+        it('should fetch ticker for ETH-CLP', async () => {
+            const result = await budaClient.getTicker('ETH-CLP');
             expect(result).toBeDefined();
             expect(result.ticker).toBeDefined();
-            expect(result.ticker.market_id).toBe('BTC-CLP');
+            expect(result.ticker.market_id).toBe('ETH-CLP');
             expect(result.ticker.last_price).toBeInstanceOf(Array);
         });
 
