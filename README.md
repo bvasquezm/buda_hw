@@ -94,6 +94,6 @@ POST /api/portfolio/value
 - **Reutilizable**: Los servicios pueden usarse en diferentes endpoints sin cambios
 
 ### 💾 Optimizaciones
-- **Caché de mercados**: Almacena datos de mercados por 1 minuto para evitar llamadas repetidas
+- **Caché de mercados**: Almacena datos de mercados por 10 minutos para evitar llamadas repetidas
 - **Validación temprana**: Rechaza inputs inválidos antes de consultar APIs externas
 - **Manejo de errores**: Si una cotización falla, continúa con las demás
