@@ -32,8 +32,8 @@ describe('Buda API Integration', () => {
             expect(result.ticker.last_price).toBeInstanceOf(Array);
         });
 
-        it('should fetch order book for BTC-CLP', async () => {
-            const result = await budaClient.getOrderBook('BTC-CLP');
+        it('should fetch order book for ETH-CLP', async () => {
+            const result = await budaClient.getOrderBook('ETH-CLP');
             expect(result).toBeDefined();
             expect(result.order_book).toBeDefined();
             expect(result.order_book.bids).toBeInstanceOf(Array);
