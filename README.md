@@ -32,7 +32,7 @@ npm install
 npm start
 ```
 
-Servidor disponible en `http://localhost:3000`
+Servidor disponible en `https://budahw.vercel.app/`
 
 ### Ejecutar tests
 
