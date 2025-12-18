@@ -11,9 +11,9 @@ describe('Buda API Integration', () => {
 
     beforeAll(() => {
         budaClient = new BudaClient();
+        portfolioService = new PortfolioService(budaClient);
         marketService = new MarketService(budaClient);
         tickerService = new TickerService(budaClient);
-        portfolioService = new PortfolioService(marketService, tickerService);
     });
 
     describe('BudaClient', () => {
