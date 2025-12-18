@@ -1,9 +1,14 @@
 import { Request, Response } from 'express';
 import { PortfolioService } from '../services/portfolio.service';
 import { validatePortfolio } from '../utils/validators';
+import { BudaClient } from '../clients/buda/buda.client';
 
 export class PortfolioController {
-  constructor(private portfolioService: PortfolioService) {}
+  readonly portfolioService: PortfolioService;
+  
+  constructor(budaClient: BudaClient) {
+    this.portfolioService = new PortfolioService(budaClient);
+  }
 
   getValue = async (req: Request, res: Response) => {
     try {
