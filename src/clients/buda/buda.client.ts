@@ -1,14 +1,9 @@
-import axios, { AxiosInstance } from 'axios';
 import { BudaMarketsResponse, BudaTicker, BudaOrderBook } from './buda.types';
+import { Client } from '../client';
 
-export class BudaClient {
-  private client: AxiosInstance;
-
+export class BudaClient extends Client {
   constructor(baseURL: string = 'https://www.buda.com/api/v2/') {
-    this.client = axios.create({
-      baseURL,
-      timeout: 5000,
-    });
+    super(baseURL);
   }
 
   async getMarkets(): Promise<BudaMarketsResponse> {

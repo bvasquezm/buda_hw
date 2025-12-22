@@ -1,4 +1,4 @@
-export interface Portfolio {
+export type Portfolio = {
   portfolio: Record<string, number>;
   fiat_currency: string;
 }

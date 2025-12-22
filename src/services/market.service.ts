@@ -1,4 +1,4 @@
-import { BudaClient } from '../clients/buda/buda.client';
+import { Client } from '../clients/client';
 import { BudaMarket } from '../clients/buda/buda.types';
 import { getMarketId } from '../utils/calculations';
 
@@ -7,16 +7,16 @@ export class MarketService {
   private cacheTimestamp: number = 0;
   private CACHE_TTL = 600000; // 10 min
 
-  constructor(private budaClient: BudaClient) {}
+  constructor(private client: Client) {}
 
-  async getMarkets(): Promise<BudaMarket[]> {
+  async getMarkets(): Promise<BudaMarket[] | null> {
     const now = Date.now();
 
     if (this.marketsCache && (now - this.cacheTimestamp) < this.CACHE_TTL) {
       return this.marketsCache;
     }
 
-    const response = await this.budaClient.getMarkets();
+    const response = await this.client.getMarkets();
     this.marketsCache = response.markets;
     this.cacheTimestamp = now;
 
@@ -26,6 +26,6 @@ export class MarketService {
   async findMarket(coin: string, fiat: string): Promise<BudaMarket | undefined> {
     const markets = await this.getMarkets();
     const marketId = getMarketId(coin, fiat);
-    return markets.find(m => m.id === marketId);
+    return markets?.find(m => m.id === marketId);
   }
 }

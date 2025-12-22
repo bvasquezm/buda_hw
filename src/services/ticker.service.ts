@@ -1,11 +1,22 @@
+import { Client } from '../clients/client';
+import { CryptoClient } from '../clients/crypto/crypto.client';
 import { BudaClient } from '../clients/buda/buda.client';
+import { parseMarketId } from '../utils/parser';
 
 export class TickerService {
-  constructor(private budaClient: BudaClient) {}
+  constructor(private client: Client) {}
 
   async getPrice(marketId: string): Promise<number> {
-    const ticker = await this.budaClient.getTicker(marketId);
-    return parseFloat(ticker.ticker.last_price[0]);
+    const response = await this.client.getTicker(marketId);
+    if (this.client instanceof CryptoClient) {
+      return response.last ?? 0;
+    }
+
+    if (this.client instanceof BudaClient) {
+      return response.ticker?.last_price?.[0] ?? response.last ?? 0;
+    }
+
+    return response.ticker?.last_price?.[0] ?? response.last ?? 0;
   }
 
   async getPrices(marketIds: string[]): Promise<Map<string, number>> {

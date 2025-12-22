@@ -3,13 +3,13 @@ import { MarketService } from './market.service';
 import { TickerService } from './ticker.service';
 import { validateMinimumAmount } from '../utils/validators';
 import { getMarketsIds } from '../utils/calculations';
-import { BudaClient } from '../clients/buda/buda.client';
+import { Client } from '../clients/client';
 
 export class PortfolioService {
-  readonly marketService: MarketService = new MarketService(this.budaClient);
-  readonly tickerService: TickerService = new TickerService(this.budaClient);
+  readonly marketService: MarketService = new MarketService(this.client);
+  readonly tickerService: TickerService = new TickerService(this.client);
 
-  constructor(private budaClient: BudaClient) {}
+  constructor(private client: Client) {}
 
   async calculateValue(payload: Portfolio): Promise<PortfolioValue> {
     const breakdown: CoinValue[] = [];
